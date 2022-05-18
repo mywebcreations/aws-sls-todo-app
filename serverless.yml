@@ -19,7 +19,7 @@ functions:
     handler: src/handler/hello.handler
     events:
       - httpApi:
-          path: /
+          path: /hello
           method: get
   addTodo:
     handler: src/handler/addTodo.handler
@@ -31,8 +31,20 @@ functions:
     handler: src/handler/fetchTodos.handler
     events:
       - httpApi:
-          patch: /fetchTodos
+          path: /todos
           method: get
+  fetchTodo:
+    handler: src/handler/fetchTodo.handler
+    events:
+      - httpApi:
+          path: /todo/{id}
+          method: get
+  updateTodo:
+    handler: src/handler/updateTodo.handler
+    events:
+      - httpApi:
+          path: /update-todo/{id}
+          method: put
 
 resources:
   Resources:

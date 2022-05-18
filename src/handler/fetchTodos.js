@@ -4,33 +4,22 @@ const AWS = require("aws-sdk");
 
 const fetchTodos = async (event) => {
         
-    const id = v4();
-    const { todo } = JSON.parse(event.body);
-    const createdAt = new Date();
-    
-    console.log("This is an id (just logging)", id);
+    const dynamoDb = new AWS.DynamoDB.DocumentClient();
 
-    const newTodo = {
-        id, 
-        todo,
-        createdAt,
-        completed: false
+    let todos;
+    try {
+        const results = await dynamoDb.scan({TableName: "TodoTable"}).promise();
+        todos = results.Items;
+    } catch(error) {
+        console.log(error)
     }
     
-    const dynamoDb = AWS.DynamoDB.DocumentClient();
-    
-    await dynamoDb.put({
-        TableName: "TodoTable",
-        Item: newTodo
-    })
-    
-
     return {
-    statusCode: 200,
-    body: JSON.stringify(newTodo),
-  };
+        statusCode: 200,
+        body: JSON.stringify(todos)
+    };
 };
 
 module.exports = {
-  handler: addTodo
+  handler: fetchTodos
 }
